@@ -101,7 +101,7 @@ function App() {
       setIsAdminLoggedIn(true);
       setLoginError('');
     } else {
-      setLoginError('Credenziali non valide. Usa: admin / admin123');
+      setLoginError('Credenziali non valide. Usa: ionutflorea264@yahoo.com / Affitto2017');
     }
   };
 
