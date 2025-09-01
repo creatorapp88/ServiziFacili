@@ -97,7 +97,7 @@ function App() {
   };
   const handleAdminLogin = (credentials: { username: string; password: string }) => {
     // Simple authentication - in production use proper authentication
-    if (credentials.username.trim() === 'admin' && credentials.password.trim() === 'admin123') {
+    if (credentials.username.trim() === 'ionutflorea264@yahoo.com' && credentials.password.trim() === 'Affitto2017') {
       setIsAdminLoggedIn(true);
       setLoginError('');
     } else {
