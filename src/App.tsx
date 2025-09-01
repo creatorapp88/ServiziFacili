@@ -672,11 +672,11 @@ function App() {
           </div>
 
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">© 2024 ServiziFacili. Tutti i diritti riservati.</p>
+            <p className="text-gray-400">© 2013 ServiziFacili. Tutti i diritti riservati.</p>
             <div className="flex items-center gap-6 mt-4 md:mt-0">
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Clock className="h-4 w-4" />
-                Risposta in 24h
+                Risposta in 24h/7
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Award className="h-4 w-4" />
