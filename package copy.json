@@ -1,7 +1,7 @@
 {
-  "name": "prontoripara",
+  "name": "ServiziCasa",
   "version": "1.0.0",
-  "description": "Progetto ProntoRipara - backend",
+  "description": "Progetto ServiziCasa - backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
