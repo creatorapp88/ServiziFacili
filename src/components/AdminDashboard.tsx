@@ -16,7 +16,8 @@ import {
   XCircle,
   Clock,
   Wallet,
-  CreditCard
+  CreditCard,
+  User
 } from 'lucide-react';
 import { formatCurrency } from '../utils/pricing';
 import { Transaction, Wallet as WalletType } from '../types';
