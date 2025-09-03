@@ -464,43 +464,281 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Esplora le nostre categorie
+              I nostri servizi
             </h3>
             <p className="text-xl text-gray-600">
-              Trova il servizio che fa per te tra centinaia di categorie
+              Scopri tutte le categorie di servizi disponibili
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {categories.map((category, index) => {
-              const IconComponent = category.icon;
-              return (
-                <div 
-                  key={index}
-                  className="group bg-white rounded-xl border border-gray-100 hover:border-purple-200 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden"
-                >
-                  <div className="relative h-32 overflow-hidden">
-                    <img 
-                      src={category.image} 
-                      alt={category.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                    <div className={`absolute top-3 left-3 w-10 h-10 ${category.color} rounded-lg flex items-center justify-center`}>
-                      <IconComponent className="h-5 w-5" />
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h4 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors mb-2">
-                      {category.name}
-                    </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {category.description}
-                    </p>
+          {/* Casa e Giardino */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">Casa e Giardino</h4>
+              <p className="text-gray-600">Servizi per la cura e manutenzione della tua casa</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/1301856/pexels-photo-1301856.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Giardinaggio"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Giardinaggio</h5>
+                    <p className="text-sm opacity-90">Potatura, manutenzione, progettazione</p>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/4239146/pexels-photo-4239146.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Pulizie"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Pulizie</h5>
+                    <p className="text-sm opacity-90">Domestiche, uffici, sanificazione</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Ristrutturazione"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Ristrutturazione</h5>
+                    <p className="text-sm opacity-90">Lavori edili, manutenzione casa</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Riparazioni e Tecnici */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">Riparazioni e Tecnici</h4>
+              <p className="text-gray-600">Professionisti specializzati per ogni tipo di riparazione</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Elettricista"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Elettricista</h5>
+                    <p className="text-sm opacity-90">Impianti, riparazioni elettriche</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/8486944/pexels-photo-8486944.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Idraulico"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Idraulico</h5>
+                    <p className="text-sm opacity-90">Perdite, scarichi, installazioni</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Caldaista"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Caldaista</h5>
+                    <p className="text-sm opacity-90">Caldaie, riscaldamento, gas</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/6585751/pexels-photo-6585751.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Montaggio Mobili"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Montaggio Mobili</h5>
+                    <p className="text-sm opacity-90">IKEA, armadi, cucine</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Servizi Creativi */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">Servizi Creativi</h4>
+              <p className="text-gray-600">Design, fotografia e servizi creativi professionali</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Interior Design"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Interior Design</h5>
+                    <p className="text-sm opacity-90">Progettazione, arredamento</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Fotografia"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Fotografia</h5>
+                    <p className="text-sm opacity-90">Matrimoni, eventi, ritratti</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Grafica e Web"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Grafica e Web</h5>
+                    <p className="text-sm opacity-90">Loghi, siti web, marketing</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Formazione e Benessere */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">Formazione e Benessere</h4>
+              <p className="text-gray-600">Crescita personale e cura del benessere</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Lezioni Private"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Lezioni Private</h5>
+                    <p className="text-sm opacity-90">Ripetizioni, lingue, musica</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Benessere"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Benessere</h5>
+                    <p className="text-sm opacity-90">Massaggi, personal trainer</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Beauty"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Beauty</h5>
+                    <p className="text-sm opacity-90">Parrucchieri, estetiste, nail art</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Auto e Servizi Speciali */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">Auto e Servizi Speciali</h4>
+              <p className="text-gray-600">Servizi automotive e specializzati</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/3806288/pexels-photo-3806288.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Auto e Moto"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Auto e Moto</h5>
+                    <p className="text-sm opacity-90">Meccanici, carrozzieri, gommisti</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Servizi Specializzati"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h5 className="text-lg font-semibold">Servizi Specializzati</h5>
+                    <p className="text-sm opacity-90">Consulenze, servizi su misura</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
