@@ -35,7 +35,6 @@ import ContactForm from './components/ContactForm';
 import SEOHead from './components/SEOHead';
 import HowItWorks from './components/HowItWorks';
 import ServiceCatalog from './components/ServiceCatalog';
-import ServiceCatalog from './components/ServiceCatalog';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import CookiePolicy from './components/CookiePolicy';
 import TermsOfService from './components/TermsOfService';
@@ -44,7 +43,6 @@ import FAQ from './components/FAQ';
 
 // Types
 import { User as UserType, Professional, ServiceRequest, Transaction } from './types';
-import { Service } from './data/services';
 import { Service } from './data/services';
 
 // Utils
@@ -360,19 +358,6 @@ function App() {
     );
   }
 
-  if (currentView === 'services') {
-    return (
-      <ServiceCatalog
-        onBack={() => setCurrentView('home')}
-        onServiceSelect={(service: Service) => {
-          setSearchQuery(service.name);
-          setShowServiceForm(true);
-          setCurrentView('home');
-        }}
-      />
-    );
-  }
-
   if (currentView === 'privacy') {
     return <PrivacyPolicy onBack={() => setCurrentView('home')} />;
   }
@@ -415,12 +400,6 @@ function App() {
                 className="text-gray-600 hover:text-gray-900"
               >
                 Come Funziona
-              </button>
-              <button
-                onClick={() => setCurrentView('services')}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Servizi
               </button>
               <button
                 onClick={() => setCurrentView('services')}
@@ -476,15 +455,6 @@ function App() {
                   className="text-left text-gray-600 hover:text-gray-900"
                 >
                   Come Funziona
-                </button>
-                <button
-                  onClick={() => {
-                    setCurrentView('services');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="text-left text-gray-600 hover:text-gray-900"
-                >
-                  Servizi
                 </button>
                 <button
                   onClick={() => {
@@ -713,17 +683,17 @@ function App() {
             <div>
               <h4 className="font-semibold mb-4">Servizi</h4>
               <ul className="space-y-2 text-gray-400">
-               <li>
-                 <button 
-                   onClick={() => setCurrentView('services')}
-                   className="hover:text-white"
-                 >
-                   Tutti i Servizi
-                 </button>
-               </li>
-               <li><button className="hover:text-white">Casa e Giardino</button></li>
-               <li><button className="hover:text-white">Riparazioni</button></li>
-               <li><button className="hover:text-white">Design</button></li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('services')}
+                    className="hover:text-white"
+                  >
+                    Tutti i Servizi
+                  </button>
+                </li>
+                <li><button className="hover:text-white">Casa e Giardino</button></li>
+                <li><button className="hover:text-white">Riparazioni</button></li>
+                <li><button className="hover:text-white">Design</button></li>
               </ul>
             </div>
             
