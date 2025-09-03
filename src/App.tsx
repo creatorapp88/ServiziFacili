@@ -35,6 +35,7 @@ import ContactForm from './components/ContactForm';
 import SEOHead from './components/SEOHead';
 import HowItWorks from './components/HowItWorks';
 import ServiceCatalog from './components/ServiceCatalog';
+import ServiceCatalog from './components/ServiceCatalog';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import CookiePolicy from './components/CookiePolicy';
 import TermsOfService from './components/TermsOfService';
@@ -43,6 +44,7 @@ import FAQ from './components/FAQ';
 
 // Types
 import { User as UserType, Professional, ServiceRequest, Transaction } from './types';
+import { Service } from './data/services';
 import { Service } from './data/services';
 
 // Utils
@@ -165,12 +167,15 @@ function App() {
     setCurrentUser(mockUser);
     setShowLoginModal(false);
     
-    addNotification({
-      type: 'success',
-      title: 'Login effettuato',
-      message: `Benvenuto ${mockUser.name}!`,
-      duration: 3000
-    });
+    // Notifica immediata di login
+    setTimeout(() => {
+      addNotification({
+        type: 'success',
+        title: 'Login effettuato con successo!',
+        message: `Benvenuto ${mockUser.name}! Ora puoi accedere a tutte le funzionalità.`,
+        duration: 4000
+      });
+    }, 100);
   };
 
   const handleRegister = (userData: any) => {
@@ -187,12 +192,15 @@ function App() {
     setCurrentUser(newUser);
     setShowLoginModal(false);
     
-    addNotification({
-      type: 'success',
-      title: 'Registrazione completata',
-      message: `Benvenuto ${newUser.name}! Il tuo account è stato creato.`,
-      duration: 5000
-    });
+    // Notifica immediata di registrazione
+    setTimeout(() => {
+      addNotification({
+        type: 'success',
+        title: 'Registrazione completata!',
+        message: `Benvenuto ${newUser.name}! Il tuo account è stato creato con successo.`,
+        duration: 5000
+      });
+    }, 100);
   };
 
   const handleProfessionalLogin = (credentials: { username: string; password: string }) => {
@@ -201,24 +209,30 @@ function App() {
       setCurrentUser(mockProfessional);
       setCurrentView('home');
       
-      addNotification({
-        type: 'success',
-        title: 'Login Professionista',
-        message: `Benvenuto ${mockProfessional.name}!`,
-        duration: 3000
-      });
+      // Notifica immediata login professionista
+      setTimeout(() => {
+        addNotification({
+          type: 'success',
+          title: 'Accesso Professionista Effettuato!',
+          message: `Benvenuto ${mockProfessional.name}! Dashboard professionista caricata.`,
+          duration: 4000
+        });
+      }, 100);
     } else {
-      addNotification({
-        type: 'error',
-        title: 'Login fallito',
-        message: 'Credenziali non valide. Usa: pro / pro123',
-        duration: 5000
-      });
+      // Notifica immediata errore login
+      setTimeout(() => {
+        addNotification({
+          type: 'error',
+          title: 'Login Fallito!',
+          message: 'Credenziali non valide. Usa: pro / pro123',
+          duration: 5000
+        });
+      }, 100);
     }
   };
 
   const handleAdminLogin = (credentials: { username: string; password: string }) => {
-    // Admin credentials: ionutflorea264@yahoo.com / Affitto2017
+    // Demo credentials from AdminLogin component
     if (credentials.username === 'ionutflorea264@yahoo.com' && credentials.password === 'Affitto2017') {
       const adminUser: UserType = {
         id: 'admin-1',
@@ -232,44 +246,62 @@ function App() {
       setCurrentUser(adminUser);
       setAdminView('dashboard');
       
-      addNotification({
-        type: 'success',
-        title: 'Login Admin',
-        message: 'Accesso amministratore effettuato',
-        duration: 3000
-      });
+      // Notifica immediata login admin
+      setTimeout(() => {
+        addNotification({
+          type: 'success',
+          title: 'Accesso Amministratore Effettuato!',
+          message: 'Benvenuto nel pannello di controllo amministratore.',
+          duration: 4000
+        });
+      }, 100);
     } else {
-      addNotification({
-        type: 'error',
-        title: 'Login fallito',
-        message: 'Credenziali amministratore non valide',
-        duration: 5000
-      });
+      // Notifica immediata errore admin
+      setTimeout(() => {
+        addNotification({
+          type: 'error',
+          title: 'Accesso Negato!',
+          message: 'Credenziali amministratore non valide.',
+          duration: 5000
+        });
+      }, 100);
     }
   };
 
   const handleLogout = () => {
+    const userName = currentUser?.name || 'Utente';
+    
     setCurrentUser(null);
     setCurrentView('home');
     
-    addNotification({
-      type: 'info',
-      title: 'Logout effettuato',
-      message: 'Arrivederci!',
-      duration: 3000
-    });
+    // Notifica immediata di logout
+    setTimeout(() => {
+      addNotification({
+        type: 'info',
+        title: 'Logout Effettuato!',
+        message: `Arrivederci ${userName}! Torna presto a trovarci.`,
+        duration: 4000
+      });
+    }, 100);
+    
+    if (window.location.pathname === '/admin' || window.location.hash === '#/admin') {
+      window.location.href = '/';
+    }
   };
 
   // Service request handler
   const handleServiceRequest = (requestData: any) => {
     console.log('Service request submitted:', requestData);
     
-    addNotification({
-      type: 'success',
-      title: 'Richiesta inviata!',
-      message: 'Riceverai i primi preventivi entro poche ore.',
-      duration: 5000
-    });
+    // Notifica immediata richiesta servizio
+    setTimeout(() => {
+      addNotification({
+        type: 'success',
+        title: 'Richiesta Inviata con Successo!',
+        message: 'Riceverai i primi preventivi entro poche ore. Controlla la tua email!',
+        duration: 6000
+      });
+    }, 100);
   };
 
   // Search handler
@@ -313,6 +345,19 @@ function App() {
 
   if (currentView === 'how-it-works') {
     return <HowItWorks onBack={() => setCurrentView('home')} />;
+  }
+
+  if (currentView === 'services') {
+    return (
+      <ServiceCatalog
+        onBack={() => setCurrentView('home')}
+        onServiceSelect={(service: Service) => {
+          setSearchQuery(service.name);
+          setShowServiceForm(true);
+          setCurrentView('home');
+        }}
+      />
+    );
   }
 
   if (currentView === 'services') {
@@ -378,6 +423,12 @@ function App() {
                 Servizi
               </button>
               <button
+                onClick={() => setCurrentView('services')}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Servizi
+              </button>
+              <button
                 onClick={() => setCurrentView('faq')}
                 className="text-gray-600 hover:text-gray-900"
               >
@@ -425,6 +476,15 @@ function App() {
                   className="text-left text-gray-600 hover:text-gray-900"
                 >
                   Come Funziona
+                </button>
+                <button
+                  onClick={() => {
+                    setCurrentView('services');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left text-gray-600 hover:text-gray-900"
+                >
+                  Servizi
                 </button>
                 <button
                   onClick={() => {
@@ -734,11 +794,7 @@ function App() {
                 </li>
                 <li>
                   <button 
-                    onClick={() => {
-                      setCurrentView('admin-login');
-                      setAdminView('login');
-                      window.history.pushState({}, '', '/admin');
-                    }}
+                    onClick={() => setCurrentView('admin-login')}
                     className="hover:text-white text-xs opacity-50"
                   >
                     Admin
