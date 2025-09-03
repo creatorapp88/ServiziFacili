@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
-export default function AdminLogin({ onLogin, error }: AdminLoginProps) {
+
+interface AdminLoginProps {
+  onLogin: (credentials: { username: string; password: string }) => void;
+  onBack?: () => void;
+  error?: string;
+}
+
+export default function AdminLogin({ onLogin, onBack, error }: AdminLoginProps) {
   const [credentials, setCredentials] = useState({
     username: 'ionutflorea264@yahoo.com',
     password: 'Affitto2017'
