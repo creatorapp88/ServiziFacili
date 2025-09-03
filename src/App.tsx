@@ -6,7 +6,6 @@ import ProfessionalDashboard from './components/ProfessionalDashboard';
 import LoginModal from './components/LoginModal';
 import UserDashboard from './components/UserDashboard';
 import { Professional, Wallet as WalletType, Transaction } from './types';
-import { pushNotificationService } from './utils/pushNotifications';
 import { 
   Search, 
   Menu, 
@@ -42,23 +41,6 @@ function App() {
   const [currentUser, setCurrentUser] = useState<{
     name: string; email: string; phone: string; city: string;
   } | null>(null);
-
-  useEffect(() => {
-    // Inizializza le notifiche push all'avvio dell'app
-    const initNotifications = async () => {
-      try {
-        // Verifica se l'utente aveva già dato il consenso
-        const hasConsent = localStorage.getItem('notificationConsent') === 'true';
-        if (hasConsent) {
-          await pushNotificationService.initialize();
-        }
-      } catch (error) {
-        console.error('Errore inizializzazione notifiche:', error);
-      }
-    };
-
-    initNotifications();
-  }, []);
 
   // Check URL for admin access
   React.useEffect(() => {
@@ -113,6 +95,7 @@ function App() {
     },
     createdAt: '2023-06-15T10:00:00Z'
   };
+
   const handleAdminLogin = (credentials: { username: string; password: string }) => {
     // Simple authentication - in production use proper authentication
     if (credentials.username.trim() === 'ionutflorea264@yahoo.com' && credentials.password.trim() === 'Affitto2017') {
@@ -155,6 +138,7 @@ function App() {
     setIsUserLoggedIn(true);
     setShowLoginModal(false);
   };
+
   const handleAdminLogout = () => {
     setIsAdminLoggedIn(false);
     setShowAdmin(false);
@@ -172,6 +156,7 @@ function App() {
     setIsUserLoggedIn(false);
     setCurrentUser(null);
   };
+
   // Show admin interface
   if (showAdmin) {
     if (!isAdminLoggedIn) {
@@ -198,86 +183,6 @@ function App() {
   if (isUserLoggedIn && currentUser) {
     return <UserDashboard user={currentUser} onLogout={handleUserLogout} />;
   }
-
-  const categories = [
-    { 
-      name: 'Giardino', 
-      icon: Home, 
-      color: 'bg-green-100 text-green-600',
-      image: 'https://images.pexels.com/photos/1301856/pexels-photo-1301856.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Giardinaggio, potatura, manutenzione verde e progettazione giardini'
-    },
-    { 
-      name: 'Pulizie', 
-      icon: Home, 
-      color: 'bg-blue-100 text-blue-600',
-      image: 'https://images.pexels.com/photos/4239146/pexels-photo-4239146.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Pulizie domestiche, uffici, condomini e servizi di sanificazione'
-    },
-    { 
-      name: 'Ristrutturazione', 
-      icon: Home, 
-      color: 'bg-orange-100 text-orange-600',
-      image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Ristrutturazioni complete, lavori edili e manutenzione casa'
-    },
-    { 
-      name: 'Riparazioni', 
-      icon: Wrench, 
-      color: 'bg-red-100 text-red-600',
-      image: 'https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Elettricisti, idraulici, tecnici caldaie e riparazioni varie'
-    },
-    { 
-      name: 'Design', 
-      icon: Palette, 
-      color: 'bg-purple-100 text-purple-600',
-      image: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Interior design, grafica, web design e consulenza creativa'
-    },
-    { 
-      name: 'Fotografia', 
-      icon: Camera, 
-      color: 'bg-orange-100 text-orange-600',
-      image: 'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Matrimoni, eventi, ritratti e servizi fotografici professionali'
-    },
-    { 
-      name: 'Lezioni', 
-      icon: GraduationCap, 
-      color: 'bg-indigo-100 text-indigo-600',
-      image: 'https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Ripetizioni, corsi di lingua, musica e formazione professionale'
-    },
-    { 
-      name: 'Benessere', 
-      icon: Heart, 
-      color: 'bg-pink-100 text-pink-600',
-      image: 'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Massaggi, personal trainer, nutrizionisti e servizi wellness'
-    },
-    { 
-      name: 'Auto e Moto', 
-      icon: Car, 
-      color: 'bg-slate-100 text-slate-600',
-      image: 'https://images.pexels.com/photos/3806288/pexels-photo-3806288.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Meccanici, carrozzieri, gommisti e servizi automotive'
-    },
-    { 
-      name: 'Beauty', 
-      icon: Scissors, 
-      color: 'bg-emerald-100 text-emerald-600',
-      image: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Parrucchieri, estetiste, nail art e trattamenti di bellezza'
-    },
-    { 
-      name: 'Montaggio Mobili', 
-      icon: Wrench, 
-      color: 'bg-amber-100 text-amber-600',
-      image: 'https://images.pexels.com/photos/6585751/pexels-photo-6585751.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Montaggio mobili IKEA, armadi, cucine e assemblaggio complementi d\'arredo'
-    },
-  ];
 
   const testimonials = [
     {
@@ -321,27 +226,6 @@ function App() {
       rating: 5,
       text: 'Ho trovato la personal trainer perfetta! Programmi personalizzati e risultati fantastici in pochi mesi.',
       location: 'Bologna'
-    },
-    {
-      name: 'Roberto Ferrari',
-      service: 'Giardinaggio',
-      rating: 5,
-      text: 'Il mio giardino non è mai stato così bello! Lavoro professionale e cura dei dettagli eccezionale.',
-      location: 'Venezia'
-    },
-    {
-      name: 'Chiara Lombardi',
-      service: 'Pulizie Casa',
-      rating: 5,
-      text: 'Servizio di pulizie affidabile e accurato. Personale gentile e casa sempre perfetta!',
-      location: 'Genova'
-    },
-    {
-      name: 'Davide Ricci',
-      service: 'Riparazione Auto',
-      rating: 5,
-      text: 'Meccanico onesto e competente. Ha riparato la mia auto spendendo molto meno del previsto.',
-      location: 'Palermo'
     }
   ];
 
@@ -427,15 +311,6 @@ function App() {
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20 relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 opacity-95">
-          <img 
-            src="https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=1200"
-            alt="Professionisti che offrono servizi"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             Trova il <span className="text-blue-600">professionista</span><br />
@@ -937,11 +812,11 @@ function App() {
           </div>
 
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">© 2013 ServiziFacili. Tutti i diritti riservati.</p>
+            <p className="text-gray-400">© 2024 ServiziFacili. Tutti i diritti riservati.</p>
             <div className="flex items-center gap-6 mt-4 md:mt-0">
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Clock className="h-4 w-4" />
-                Risposta in 24h/7
+                Risposta in 24h
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Award className="h-4 w-4" />
