@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import ProfessionalLogin from './components/ProfessionalLogin';
@@ -6,6 +6,7 @@ import ProfessionalDashboard from './components/ProfessionalDashboard';
 import LoginModal from './components/LoginModal';
 import UserDashboard from './components/UserDashboard';
 import { Professional, Wallet as WalletType, Transaction } from './types';
+import { pushNotificationService } from './utils/pushNotifications';
 import { 
   Search, 
   Menu, 
@@ -41,6 +42,23 @@ function App() {
   const [currentUser, setCurrentUser] = useState<{
     name: string; email: string; phone: string; city: string;
   } | null>(null);
+
+  useEffect(() => {
+    // Inizializza le notifiche push all'avvio dell'app
+    const initNotifications = async () => {
+      try {
+        // Verifica se l'utente aveva già dato il consenso
+        const hasConsent = localStorage.getItem('notificationConsent') === 'true';
+        if (hasConsent) {
+          await pushNotificationService.initialize();
+        }
+      } catch (error) {
+        console.error('Errore inizializzazione notifiche:', error);
+      }
+    };
+
+    initNotifications();
+  }, []);
 
   // Check URL for admin access
   React.useEffect(() => {
