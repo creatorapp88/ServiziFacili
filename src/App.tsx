@@ -416,7 +416,6 @@ function App() {
             alt="Professionisti che offrono servizi"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 to-indigo-100/80"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
