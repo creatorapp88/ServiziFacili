@@ -16,7 +16,8 @@ import {
   XCircle,
   Clock,
   Wallet,
-  CreditCard
+  CreditCard,
+  User
 } from 'lucide-react';
 import { formatCurrency } from '../utils/pricing';
 import { Transaction, Wallet as WalletType } from '../types';
@@ -24,6 +25,7 @@ import WalletCard from './WalletCard';
 
 interface AdminDashboardProps {
   onLogout: () => void;
+  onViewRequests?: () => void;
 }
 
 interface Request {
@@ -36,9 +38,13 @@ interface Request {
   status: 'pending' | 'approved' | 'rejected';
   createdAt: string;
   budget?: string;
+  autoApproved?: boolean;
+  approvedAt?: string;
+  quotesReceived?: number;
+  maxQuotes?: number;
 }
 
-export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
+export default function AdminDashboard({ onLogout, onViewRequests }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [requests, setRequests] = useState<Request[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -87,36 +93,73 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     const mockRequests: Request[] = [
       {
         id: 1,
-        name: 'Mario Rossi',
-        email: 'mario.rossi@email.com',
-        phone: '+39 123 456 7890',
+       name: 'Alessandro Conti',
+       email: 'alessandro.conti@gmail.com',
+       phone: '+39 347 892 1456',
         service: 'Riparazione Caldaia',
-        description: 'La caldaia non si accende più da ieri sera',
-        status: 'pending',
+       description: 'Caldaia Baxi che non si accende più da 2 giorni. Necessario intervento urgente per appartamento 90mq.',
+        status: 'approved',
+        autoApproved: true,
+        approvedAt: '2024-01-15T10:31:00Z',
         createdAt: '2024-01-15T10:30:00Z',
-        budget: '€150-250'
+       quotesReceived: 0,
+       maxQuotes: 4
       },
       {
         id: 2,
-        name: 'Laura Bianchi',
-        email: 'laura.bianchi@email.com',
-        phone: '+39 987 654 3210',
-        service: 'Imbiancatura Casa',
-        description: 'Necessito di imbiancare un appartamento di 80mq',
+       name: 'Francesca Martini',
+       email: 'francesca.martini@outlook.it',
+       phone: '+39 335 674 8923',
+       service: 'Imbiancatura Appartamento',
+       description: 'Imbiancatura completa appartamento 75mq: 3 camere, cucina, bagno e corridoio. Pareti già preparate.',
         status: 'approved',
         createdAt: '2024-01-14T15:45:00Z',
-        budget: '€800-1200'
+        budget: '€600-900'
       },
       {
         id: 3,
-        name: 'Giuseppe Verdi',
-        email: 'giuseppe.verdi@email.com',
-        phone: '+39 555 123 4567',
+       name: 'Roberto Ferrari',
+       email: 'roberto.ferrari@libero.it',
+       phone: '+39 328 456 7891',
         service: 'Riparazione Elettrodomestici',
-        description: 'Lavatrice che perde acqua',
-        status: 'rejected',
+       description: 'Lavatrice Samsung 8kg che perde acqua dal fondo durante il lavaggio. Modello WW80J5555FA.',
+       status: 'approved',
         createdAt: '2024-01-13T09:15:00Z',
-        budget: '€100-150'
+        budget: '€80-150'
+     },
+     {
+       id: 4,
+       name: 'Giulia Romano',
+       email: 'giulia.romano@yahoo.it',
+       phone: '+39 342 789 1234',
+       service: 'Montaggio Mobili IKEA',
+       description: 'Montaggio cucina IKEA completa: pensili, basi, elettrodomestici da incasso. Cucina già consegnata.',
+       status: 'pending',
+       createdAt: '2024-01-12T14:20:00Z',
+       budget: '€300-450'
+     },
+     {
+       id: 5,
+       name: 'Marco Bianchi',
+       email: 'marco.bianchi@gmail.com',
+       phone: '+39 339 567 8912',
+       service: 'Riparazione Idraulica',
+       description: 'Perdita dal soffitto del bagno, probabilmente dai tubi del piano superiore. Urgente.',
+       status: 'approved',
+       createdAt: '2024-01-11T08:45:00Z',
+       quotesReceived: 3,
+       maxQuotes: 4
+     },
+     {
+       id: 6,
+       name: 'Elena Ricci',
+       email: 'elena.ricci@hotmail.com',
+       phone: '+39 351 234 5678',
+       service: 'Servizio Pulizie',
+       description: 'Pulizie post-ristrutturazione per appartamento 60mq. Rimozione polvere, lavaggio pavimenti e sanitari.',
+       status: 'pending',
+       createdAt: '2024-01-10T16:30:00Z',
+       budget: '€80-120'
       }
     ];
     setRequests(mockRequests);
@@ -186,6 +229,10 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   {stats.pendingRequests}
                 </span>
               </button>
+              <div className="text-right">
+                <p className="text-sm text-gray-600">Admin</p>
+                <p className="font-semibold text-gray-900">Pannello di Controllo</p>
+              </div>
               <button
                 onClick={onLogout}
                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
@@ -205,6 +252,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
             {[
               { id: 'dashboard', name: 'Dashboard', icon: TrendingUp },
               { id: 'requests', name: 'Richieste', icon: FileText },
+              { id: 'kyc', name: 'Verifiche KYC', icon: User },
               { id: 'wallet', name: 'Wallet', icon: Wallet },
               { id: 'users', name: 'Utenti', icon: Users },
               { id: 'settings', name: 'Impostazioni', icon: Settings }
@@ -346,7 +394,6 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Servizio</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Budget</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stato</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
@@ -364,9 +411,12 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-900">{request.service}</div>
                           <div className="text-sm text-gray-500 max-w-xs truncate">{request.description}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {request.budget || 'Non specificato'}
+                          <div className="text-xs text-blue-600 mt-1">
+                            Preventivi: {request.quotesReceived || 0}/{request.maxQuotes || 4}
+                            {(request.quotesReceived || 0) >= (request.maxQuotes || 4) && (
+                              <span className="ml-2 bg-red-100 text-red-800 px-2 py-1 rounded-full">COMPLETA</span>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 w-fit ${getStatusColor(request.status)}`}>
@@ -382,19 +432,26 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                             <button className="text-blue-600 hover:text-blue-900">
                               <Eye className="h-4 w-4" />
                             </button>
-                            {request.status === 'pending' && (
+                            {/* Controlli admin sempre disponibili */}
+                            {request.status === 'approved' && (
+                              <>
+                                <button
+                                  onClick={() => updateRequestStatus(request.id, 'rejected')}
+                                  className="text-red-600 hover:text-red-900"
+                                  title="Rifiuta richiesta"
+                                >
+                                  <XCircle className="h-4 w-4" />
+                                </button>
+                              </>
+                            )}
+                            {request.status === 'rejected' && (
                               <>
                                 <button
                                   onClick={() => updateRequestStatus(request.id, 'approved')}
                                   className="text-green-600 hover:text-green-900"
+                                  title="Riapprova richiesta"
                                 >
                                   <CheckCircle className="h-4 w-4" />
-                                </button>
-                                <button
-                                  onClick={() => updateRequestStatus(request.id, 'rejected')}
-                                  className="text-red-600 hover:text-red-900"
-                                >
-                                  <XCircle className="h-4 w-4" />
                                 </button>
                               </>
                             )}
@@ -404,6 +461,64 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* KYC Tab */}
+        {activeTab === 'kyc' && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">Verifiche KYC in Attesa</h3>
+              </div>
+              <div className="p-6">
+                <div className="text-center py-12">
+                  <User className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Nessuna Verifica in Attesa</h3>
+                  <p className="text-gray-600">Le nuove richieste di verifica KYC appariranno qui.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* KYC Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">In Attesa</p>
+                    <p className="text-3xl font-bold text-yellow-600">3</p>
+                  </div>
+                  <Clock className="h-8 w-8 text-yellow-600" />
+                </div>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Approvate</p>
+                    <p className="text-3xl font-bold text-green-600">127</p>
+                  </div>
+                  <CheckCircle className="h-8 w-8 text-green-600" />
+                </div>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Rifiutate</p>
+                    <p className="text-3xl font-bold text-red-600">8</p>
+                  </div>
+                  <XCircle className="h-8 w-8 text-red-600" />
+                </div>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Tasso Approvazione</p>
+                    <p className="text-3xl font-bold text-blue-600">94%</p>
+                  </div>
+                  <TrendingUp className="h-8 w-8 text-blue-600" />
+                </div>
               </div>
             </div>
           </div>

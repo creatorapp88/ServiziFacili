@@ -1,53 +1,82 @@
-import React, { useState } from 'react';
-import AdminLogin from './components/AdminLogin';
-import AdminDashboard from './components/AdminDashboard';
-import ProfessionalLogin from './components/ProfessionalLogin';
-import ProfessionalDashboard from './components/ProfessionalDashboard';
-import LoginModal from './components/LoginModal';
-import UserDashboard from './components/UserDashboard';
-import { Professional, Wallet as WalletType, Transaction } from './types';
+import React, { useState, useEffect } from 'react';
 import { 
   Search, 
-  Menu, 
-  X, 
+  MapPin, 
   Star, 
   Users, 
   CheckCircle, 
-  Home, 
-  Wrench, 
-  Palette, 
-  Camera, 
-  GraduationCap, 
-  Heart, 
-  Car, 
-  Scissors,
-  ArrowRight,
-  Shield,
-  Clock,
-  Award,
-  Briefcase
+  ArrowRight, 
+  Menu, 
+  X, 
+  Phone, 
+  Mail,
+  MessageCircle,
+  User,
+  Briefcase,
+  Shield
 } from 'lucide-react';
 
-function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showAdmin, setShowAdmin] = useState(false);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
-  const [showProfessional, setShowProfessional] = useState(false);
-  const [isProfessionalLoggedIn, setIsProfessionalLoggedIn] = useState(false);
-  const [currentProfessional, setCurrentProfessional] = useState<Professional | null>(null);
-  const [loginError, setLoginError] = useState('');
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{
-    name: string; email: string; phone: string; city: string;
-  } | null>(null);
+// Components
+import ServiceRequestForm from './components/ServiceRequestForm';
+import SearchResults from './components/SearchResults';
+import LoginModal from './components/LoginModal';
+import UserDashboard from './components/UserDashboard';
+import ProfessionalDashboard from './components/ProfessionalDashboard';
+import AdminDashboard from './components/AdminDashboard';
+import ProfessionalLogin from './components/ProfessionalLogin';
+import AdminLogin from './components/AdminLogin';
+import ReviewsSection from './components/ReviewsSection';
+import TrustBadges from './components/TrustBadges';
+import ChatWidget from './components/ChatWidget';
+import WhatsAppBanner from './components/WhatsAppBanner';
+import CookieBanner from './components/CookieBanner';
+import NotificationSystem from './components/NotificationSystem';
+import ContactForm from './components/ContactForm';
+import SEOHead from './components/SEOHead';
+import HowItWorks from './components/HowItWorks';
+import ServiceCatalog from './components/ServiceCatalog';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import CookiePolicy from './components/CookiePolicy';
+import TermsOfService from './components/TermsOfService';
+import LegalInfo from './components/LegalInfo';
+import FAQ from './components/FAQ';
 
-  // Check URL for admin access
-  React.useEffect(() => {
-    if (window.location.pathname === '/admin' || window.location.hash === '#admin') {
-      setShowAdmin(true);
-    } else if (window.location.pathname === '/professional' || window.location.hash === '#professional') {
-      setShowProfessional(true);
+// Types
+import { User as UserType, Professional, ServiceRequest, Transaction } from './types';
+import { Service } from './data/services';
+
+// Utils
+import { formatCurrency } from './utils/pricing';
+
+interface Notification {
+  id: string;
+  type: 'success' | 'error' | 'info' | 'warning';
+  title: string;
+  message: string;
+  duration?: number;
+}
+
+function App() {
+  // State management
+  const [currentView, setCurrentView] = useState<'home' | 'professional-login' | 'admin-login' | 'how-it-works' | 'services' | 'privacy' | 'cookies' | 'terms' | 'legal' | 'faq'>('home');
+  const [adminView, setAdminView] = useState<'login' | 'dashboard'>('login');
+  const [showServiceForm, setShowServiceForm] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [location, setLocation] = useState('');
+  const [currentUser, setCurrentUser] = useState<UserType | Professional | null>(null);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  // Check for admin route on load
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/admin') {
+      setCurrentView('admin-login');
+      setAdminView('login');
     }
   }, []);
 
@@ -56,9 +85,37 @@ function App() {
     id: 'prof-1',
     name: 'Marco Fontana',
     email: 'marco.fontana@email.com',
-    phone: '+39 333 123 4567',
+    phone: '+39 347 123 4567',
     type: 'professional',
-    services: ['Riparazione Caldaia', 'Impianti Idraulici', 'Manutenzione'],
+    createdAt: '2024-01-01T00:00:00Z',
+    wallet: {
+      id: 'wallet-1',
+      userId: 'prof-1',
+      balance: 45.50,
+      currency: 'EUR',
+      transactions: [
+        {
+          id: 'tx-1',
+          walletId: 'wallet-1',
+          type: 'debit',
+          amount: 8.50,
+          description: 'Acquisto richiesta: Riparazione Caldaia',
+          relatedRequestId: 'req-1',
+          createdAt: '2024-01-15T10:30:00Z',
+          status: 'completed'
+        },
+        {
+          id: 'tx-2',
+          walletId: 'wallet-1',
+          type: 'credit',
+          amount: 50.00,
+          description: 'Ricarica wallet',
+          createdAt: '2024-01-14T15:20:00Z',
+          status: 'completed'
+        }
+      ]
+    },
+    services: ['Riparazione Caldaie', 'Manutenzione Impianti', 'Assistenza Tecnica'],
     location: {
       city: 'Milano',
       province: 'MI'
@@ -66,700 +123,537 @@ function App() {
     verified: true,
     rating: 4.8,
     completedJobs: 127,
-    wallet: {
-      id: 'wallet-prof-1',
-      userId: 'prof-1',
-      balance: 45.50,
-      currency: 'EUR',
-      transactions: [
-        {
-          id: 'tx-prof-1',
-          walletId: 'wallet-prof-1',
-          type: 'debit',
-          amount: 8.50,
-          description: 'Acquisto richiesta: Riparazione Caldaia',
-          relatedRequestId: 'req-1',
-          createdAt: '2024-01-15T10:45:00Z',
-          status: 'completed'
-        },
-        {
-          id: 'tx-prof-2',
-          walletId: 'wallet-prof-1',
-          type: 'credit',
-          amount: 50.00,
-          description: 'Ricarica wallet',
-          createdAt: '2024-01-14T09:00:00Z',
-          status: 'completed'
-        }
-      ]
-    },
-    createdAt: '2023-06-15T10:00:00Z'
+    kycStatus: 'approved',
+    kycApprovedAt: '2024-01-01T00:00:00Z'
   };
 
-  const handleAdminLogin = (credentials: { username: string; password: string }) => {
-    // Simple authentication - in production use proper authentication
-    if (credentials.username.trim() === 'ionutflorea264@yahoo.com' && credentials.password.trim() === 'Affitto2017') {
-      setIsAdminLoggedIn(true);
-      setLoginError('');
-    } else {
-      setLoginError('Credenziali non valide. Usa: ionutflorea264@yahoo.com / Affitto2017');
-    }
+  // Cookie management
+  const handleCookieAcceptAll = () => {
+    console.log('All cookies accepted');
   };
 
-  const handleProfessionalLogin = (credentials: { username: string; password: string }) => {
-    if (credentials.username.trim() === 'pro' && credentials.password.trim() === 'pro123') {
-      setIsProfessionalLoggedIn(true);
-      setCurrentProfessional(mockProfessional);
-      setLoginError('');
-    } else {
-      setLoginError('Credenziali non valide. Usa: pro / pro123');
-    }
+  const handleCookieRejectAll = () => {
+    console.log('All cookies rejected');
   };
 
-  const handleUserLogin = (credentials: { email: string; password: string }) => {
-    // Mock login - in production use proper authentication
-    setCurrentUser({
+  const handleCookieCustomize = () => {
+    console.log('Cookie preferences customized');
+  };
+
+  // Notification management
+  const addNotification = (notification: Omit<Notification, 'id'>) => {
+    const id = Date.now().toString();
+    setNotifications(prev => [...prev, { ...notification, id }]);
+  };
+
+  const removeNotification = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  // Authentication handlers
+  const handleLogin = (credentials: { email: string; password: string }) => {
+    // Mock login - in produzione verificare con backend
+    const mockUser: UserType = {
+      id: 'user-1',
       name: 'Mario Rossi',
       email: credentials.email,
       phone: '+39 123 456 7890',
-      city: 'Milano'
-    });
-    setIsUserLoggedIn(true);
+      type: 'client',
+      createdAt: new Date().toISOString()
+    };
+    
+    setCurrentUser(mockUser);
     setShowLoginModal(false);
+    
+    // Notifica immediata di login
+    setTimeout(() => {
+      addNotification({
+        type: 'success',
+        title: 'Login effettuato con successo!',
+        message: `Benvenuto ${mockUser.name}! Ora puoi accedere a tutte le funzionalità.`,
+        duration: 4000
+      });
+    }, 100);
   };
 
-  const handleUserRegister = (userData: any) => {
-    setCurrentUser({
+  const handleRegister = (userData: any) => {
+    // Mock registration
+    const newUser: UserType = {
+      id: `user-${Date.now()}`,
       name: userData.name,
       email: userData.email,
       phone: userData.phone,
-      city: userData.city
-    });
-    setIsUserLoggedIn(true);
+      type: 'client',
+      createdAt: new Date().toISOString()
+    };
+    
+    setCurrentUser(newUser);
     setShowLoginModal(false);
+    
+    // Notifica immediata di registrazione
+    setTimeout(() => {
+      addNotification({
+        type: 'success',
+        title: 'Registrazione completata!',
+        message: `Benvenuto ${newUser.name}! Il tuo account è stato creato con successo.`,
+        duration: 5000
+      });
+    }, 100);
   };
 
-  const handleAdminLogout = () => {
-    setIsAdminLoggedIn(false);
-    setShowAdmin(false);
-    window.location.hash = '';
+  const handleProfessionalLogin = (credentials: { username: string; password: string }) => {
+    // Demo credentials: pro / pro123
+    if (credentials.username === 'pro' && credentials.password === 'pro123') {
+      setCurrentUser(mockProfessional);
+      setCurrentView('home');
+      
+      // Notifica immediata login professionista
+      setTimeout(() => {
+        addNotification({
+          type: 'success',
+          title: 'Accesso Professionista Effettuato!',
+          message: `Benvenuto ${mockProfessional.name}! Dashboard professionista caricata.`,
+          duration: 4000
+        });
+      }, 100);
+    } else {
+      // Notifica immediata errore login
+      setTimeout(() => {
+        addNotification({
+          type: 'error',
+          title: 'Login Fallito!',
+          message: 'Credenziali non valide. Usa: pro / pro123',
+          duration: 5000
+        });
+      }, 100);
+    }
   };
 
-  const handleProfessionalLogout = () => {
-    setIsProfessionalLoggedIn(false);
-    setShowProfessional(false);
-    setCurrentProfessional(null);
-    window.location.hash = '';
+  const handleAdminLogin = (credentials: { username: string; password: string }) => {
+    // Demo credentials from AdminLogin component
+    if (credentials.username === 'ionutflorea264@yahoo.com' && credentials.password === 'Affitto2017') {
+      const adminUser: UserType = {
+        id: 'admin-1',
+        name: 'Amministratore',
+        email: credentials.username,
+        phone: '+39 389 633 5889',
+        type: 'admin',
+        createdAt: new Date().toISOString()
+      };
+      
+      setCurrentUser(adminUser);
+      setAdminView('dashboard');
+      
+      // Notifica immediata login admin
+      setTimeout(() => {
+        addNotification({
+          type: 'success',
+          title: 'Accesso Amministratore Effettuato!',
+          message: 'Benvenuto nel pannello di controllo amministratore.',
+          duration: 4000
+        });
+      }, 100);
+    } else {
+      // Notifica immediata errore admin
+      setTimeout(() => {
+        addNotification({
+          type: 'error',
+          title: 'Accesso Negato!',
+          message: 'Credenziali amministratore non valide.',
+          duration: 5000
+        });
+      }, 100);
+    }
   };
 
-  const handleUserLogout = () => {
-    setIsUserLoggedIn(false);
+  const handleLogout = () => {
+    const userName = currentUser?.name || 'Utente';
+    
     setCurrentUser(null);
+    setCurrentView('home');
+    
+    // Notifica immediata di logout
+    setTimeout(() => {
+      addNotification({
+        type: 'info',
+        title: 'Logout Effettuato!',
+        message: `Arrivederci ${userName}! Torna presto a trovarci.`,
+        duration: 4000
+      });
+    }, 100);
+    
+    if (window.location.pathname === '/admin' || window.location.hash === '#/admin') {
+      window.location.href = '/';
+    }
   };
 
-  // Show admin interface
-  if (showAdmin) {
-    if (!isAdminLoggedIn) {
-      return <AdminLogin onLogin={handleAdminLogin} error={loginError} />;
+  // Service request handler
+  const handleServiceRequest = (requestData: any) => {
+    console.log('Service request submitted:', requestData);
+    
+    // Notifica immediata richiesta servizio
+    setTimeout(() => {
+      addNotification({
+        type: 'success',
+        title: 'Richiesta Inviata con Successo!',
+        message: 'Riceverai i primi preventivi entro poche ore. Controlla la tua email!',
+        duration: 6000
+      });
+    }, 100);
+  };
+
+  // Search handler
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim() && location.trim()) {
+      setShowSearchResults(true);
     }
-    return <AdminDashboard onLogout={handleAdminLogout} />;
+  };
+
+  // Render different views based on current user and view state
+  if (currentUser?.type === 'client') {
+    return <UserDashboard user={currentUser} onLogout={handleLogout} />;
   }
 
-  // Show professional interface
-  if (showProfessional) {
-    if (!isProfessionalLoggedIn || !currentProfessional) {
-      return (
-        <ProfessionalLogin 
-          onLogin={handleProfessionalLogin} 
-          onBack={() => setShowProfessional(false)}
-          error={loginError} 
-        />
-      );
-    }
-    return <ProfessionalDashboard professional={currentProfessional} onLogout={handleProfessionalLogout} />;
+  if (currentUser?.type === 'professional') {
+    return <ProfessionalDashboard professional={currentUser as Professional} onLogout={handleLogout} />;
   }
 
-  // Show user dashboard if logged in
-  if (isUserLoggedIn && currentUser) {
-    return <UserDashboard user={currentUser} onLogout={handleUserLogout} />;
+  if (currentUser?.type === 'admin') {
+    return <AdminDashboard onLogout={handleLogout} />;
   }
 
-  const testimonials = [
-    {
-      name: 'Marco Rossi',
-      service: 'Ristrutturazione Bagno',
-      rating: 5,
-      text: 'Ho trovato il professionista perfetto per ristrutturare il mio bagno. Servizio eccellente e prezzo competitivo!',
-      location: 'Milano'
-    },
-    {
-      name: 'Laura Bianchi',
-      service: 'Lezioni di Inglese',
-      rating: 5,
-      text: 'Grazie a questa piattaforma ho trovato un\'insegnante fantastica. Molto professionale e disponibile.',
-      location: 'Roma'
-    },
-    {
-      name: 'Giuseppe Verdi',
-      service: 'Riparazione Caldaia',
-      rating: 5,
-      text: 'Servizio rapidissimo! In poche ore avevo già 3 preventivi e ho risolto il problema della caldaia.',
-      location: 'Napoli'
-    },
-    {
-      name: 'Francesca Neri',
-      service: 'Wedding Photography',
-      rating: 5,
-      text: 'Fotografo eccezionale per il mio matrimonio! Foto stupende e servizio impeccabile. Consigliatissimo!',
-      location: 'Firenze'
-    },
-    {
-      name: 'Alessandro Conti',
-      service: 'Impianto Elettrico',
-      rating: 5,
-      text: 'Elettricista molto competente, ha risolto tutti i problemi dell\'impianto in tempi record. Prezzi onesti.',
-      location: 'Torino'
-    },
-    {
-      name: 'Giulia Martini',
-      service: 'Personal Trainer',
-      rating: 5,
-      text: 'Ho trovato la personal trainer perfetta! Programmi personalizzati e risultati fantastici in pochi mesi.',
-      location: 'Bologna'
-    }
-  ];
+  if (currentView === 'professional-login') {
+    return (
+      <ProfessionalLogin
+        onLogin={handleProfessionalLogin}
+        onBack={() => setCurrentView('home')}
+      />
+    );
+  }
 
+  if (currentView === 'admin-login') {
+    return (
+      <AdminLogin
+        onLogin={handleAdminLogin}
+        onBack={window.location.pathname === '/admin' ? undefined : () => setCurrentView('home')}
+      />
+    );
+  }
+
+  if (currentView === 'how-it-works') {
+    return <HowItWorks onBack={() => setCurrentView('home')} />;
+  }
+
+  if (currentView === 'services') {
+    return (
+      <ServiceCatalog
+        onBack={() => setCurrentView('home')}
+        onServiceSelect={(service: Service) => {
+          setSearchQuery(service.name);
+          setShowServiceForm(true);
+          setCurrentView('home');
+        }}
+      />
+    );
+  }
+
+  if (currentView === 'privacy') {
+    return <PrivacyPolicy onBack={() => setCurrentView('home')} />;
+  }
+
+  if (currentView === 'cookies') {
+    return <CookiePolicy onBack={() => setCurrentView('home')} />;
+  }
+
+  if (currentView === 'terms') {
+    return <TermsOfService onBack={() => setCurrentView('home')} />;
+  }
+
+  if (currentView === 'legal') {
+    return <LegalInfo onBack={() => setCurrentView('home')} />;
+  }
+
+  if (currentView === 'faq') {
+    return <FAQ onBack={() => setCurrentView('home')} />;
+  }
+
+  // Main homepage
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead />
+      
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">ServiziFacili</h1>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                ServiziFacili
+              </h1>
             </div>
-            
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-600 hover:text-blue-500 transition-colors">Come funziona</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Categorie</a>
-              <a href="#" className="text-gray-600 hover:text-blue-700 transition-colors">Per Professionisti</a>
-            </nav>
 
-            <div className="hidden md:flex items-center space-x-4">
-              <button 
-                onClick={() => setShowLoginModal(true)}
-                className="text-gray-600 hover:text-blue-600 transition-colors"
-              >Accedi</button>
-              <button 
-                onClick={() => setShowLoginModal(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                Registrati
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <button
+                onClick={() => setCurrentView('how-it-works')}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Come Funziona
               </button>
-              <button 
-                onClick={() => setShowProfessional(true)}
-                className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 transition-colors"
+              <button
+                onClick={() => setCurrentView('services')}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Servizi
+              </button>
+              <button
+                onClick={() => setCurrentView('faq')}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                FAQ
+              </button>
+              <button
+                onClick={() => setShowContactForm(true)}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Contatti
+              </button>
+              <button
+                onClick={() => setCurrentView('professional-login')}
+                className="flex items-center space-x-1 text-blue-600 hover:text-blue-700"
               >
                 <Briefcase className="h-4 w-4" />
-                <span>Pro</span>
+                <span>Professionisti</span>
               </button>
-              <button 
-                onClick={() => setShowAdmin(true)}
-                className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              <button
+                onClick={() => setShowLoginModal(true)}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
               >
-                Admin
+                Accedi
               </button>
-            </div>
+            </nav>
 
             {/* Mobile menu button */}
-            <button 
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
-        </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <a href="#" className="block px-3 py-2 text-gray-600">Come funziona</a>
-              <a href="#" className="block px-3 py-2 text-gray-600">Categorie</a>
-              <a href="#" className="block px-3 py-2 text-gray-600">Per Professionisti</a>
-              <button onClick={() => setShowLoginModal(true)} className="block px-3 py-2 text-gray-600 w-full text-left">Accedi</button>
-              <button onClick={() => setShowLoginModal(true)} className="block px-3 py-2 bg-blue-600 text-white rounded-lg mx-3 w-full text-left">Registrati</button>
-              <button 
-                onClick={() => setShowProfessional(true)}
-                className="block px-3 py-2 text-gray-600 w-full text-left"
-              >
-                Dashboard Pro
-              </button>
+          {/* Mobile Navigation */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200">
+              <div className="flex flex-col space-y-4">
+                <button
+                  onClick={() => {
+                    setCurrentView('how-it-works');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left text-gray-600 hover:text-gray-900"
+                >
+                  Come Funziona
+                </button>
+                <button
+                  onClick={() => {
+                    setCurrentView('services');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left text-gray-600 hover:text-gray-900"
+                >
+                  Servizi
+                </button>
+                <button
+                  onClick={() => {
+                    setCurrentView('faq');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left text-gray-600 hover:text-gray-900"
+                >
+                  FAQ
+                </button>
+                <button
+                  onClick={() => {
+                    setShowContactForm(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left text-gray-600 hover:text-gray-900"
+                >
+                  Contatti
+                </button>
+                <button
+                  onClick={() => {
+                    setCurrentView('professional-login');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left text-blue-600 hover:text-blue-700"
+                >
+                  Area Professionisti
+                </button>
+                <button
+                  onClick={() => {
+                    setShowLoginModal(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg w-fit"
+                >
+                  Accedi
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </header>
 
-      {/* Login Modal */}
-      <LoginModal 
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onLogin={handleUserLogin}
-        onRegister={handleUserRegister}
-      />
-
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Trova il <span className="text-blue-600">professionista</span><br />
-            perfetto per te
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Confronta preventivi gratuiti dai migliori professionisti della tua zona in pochi minuti
-          </p>
-
-          {/* Search Form */}
-          <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <input 
-                  type="text"
-                  placeholder="Che servizio ti serve?"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                />
+      <section className="bg-gradient-to-br from-purple-50 to-pink-50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+              Trova il <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Professionista</span> Perfetto per Te
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+              Confronta preventivi gratuiti dai migliori professionisti della tua zona. 
+              Oltre 87.500 professionisti verificati per casa, riparazioni, design e molto altro.
+            </p>
+            
+            {/* Search Form */}
+            <form onSubmit={handleSearch} className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Che servizio ti serve?"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-lg"
+                    />
+                  </div>
+                  <div className="relative">
+                    <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Dove?"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-lg"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center justify-center space-x-2"
+                  >
+                    <Search className="h-5 w-5" />
+                    <span>Cerca</span>
+                  </button>
+                </div>
+                
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => setShowServiceForm(true)}
+                    className="text-purple-600 hover:text-purple-700 font-medium flex items-center space-x-2 mx-auto"
+                  >
+                    <span>Oppure richiedi preventivi gratuiti</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
-              <div className="flex-1">
-                <input 
-                  type="text"
-                  placeholder="Dove?"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                />
-              </div>
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 min-w-[140px]">
-                <Search className="h-5 w-5" />
-                Cerca
-              </button>
-            </div>
+            </form>
           </div>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-            <span className="bg-white px-4 py-2 rounded-full shadow-sm">✓ Preventivi gratuiti</span>
-            <span className="bg-white px-4 py-2 rounded-full shadow-sm">✓ Professionisti verificati</span>
-            <span className="bg-white px-4 py-2 rounded-full shadow-sm">✓ Senza impegno</span>
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-3xl font-bold text-purple-600 mb-2">87.500+</div>
+              <div className="text-gray-600">Professionisti</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-pink-600 mb-2">12.847</div>
+              <div className="text-gray-600">Clienti Soddisfatti</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-purple-600 mb-2">4.8</div>
+              <div className="text-gray-600">Rating Medio</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-pink-600 mb-2">24h</div>
+              <div className="text-gray-600">Tempo Risposta</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Services Grid */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              I nostri servizi
-            </h3>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Servizi Più Richiesti
+            </h2>
             <p className="text-xl text-gray-600">
-              Scopri tutte le categorie di servizi disponibili
+              Trova il professionista giusto per ogni esigenza
             </p>
           </div>
 
-          {/* Casa e Giardino */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">Casa e Giardino</h4>
-              <p className="text-gray-600">Servizi per la cura e manutenzione della tua casa</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/1301856/pexels-photo-1301856.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Giardinaggio"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Giardinaggio</h5>
-                    <p className="text-sm opacity-90">Potatura, manutenzione, progettazione</p>
-                  </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+            {[
+              { name: 'Idraulico', icon: '🔧', color: 'bg-blue-100 text-blue-600', category: 'riparazioni' },
+              { name: 'Elettricista', icon: '⚡', color: 'bg-yellow-100 text-yellow-600', category: 'riparazioni' },
+              { name: 'Imbianchino', icon: '🎨', color: 'bg-green-100 text-green-600', category: 'casa-giardino' },
+              { name: 'Giardiniere', icon: '🌱', color: 'bg-emerald-100 text-emerald-600', category: 'casa-giardino' },
+              { name: 'Pulizie', icon: '🧽', color: 'bg-purple-100 text-purple-600', category: 'casa-giardino' },
+              { name: 'Fotografo', icon: '📸', color: 'bg-pink-100 text-pink-600', category: 'fotografia' },
+              { name: 'Personal Trainer', icon: '💪', color: 'bg-red-100 text-red-600', category: 'benessere' },
+              { name: 'Tutti i Servizi', icon: '🔍', color: 'bg-gray-100 text-gray-600', category: 'all' }
+            ].map((service, index) => (
+              <div
+                key={index}
+                className="text-center p-6 rounded-xl hover:shadow-lg transition-all duration-300 cursor-pointer group"
+                onClick={() => {
+                  if (service.category === 'all') {
+                    setCurrentView('services');
+                  } else {
+                    setSearchQuery(service.name);
+                    setShowServiceForm(true);
+                  }
+                }}
+              >
+                <div className={`w-16 h-16 ${service.color} rounded-full flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  {service.icon}
                 </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/4239146/pexels-photo-4239146.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Pulizie"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Pulizie</h5>
-                    <p className="text-sm opacity-90">Domestiche, uffici, sanificazione</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Ristrutturazione"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Ristrutturazione</h5>
-                    <p className="text-sm opacity-90">Lavori edili, manutenzione casa</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Riparazioni e Tecnici */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">Riparazioni e Tecnici</h4>
-              <p className="text-gray-600">Professionisti specializzati per ogni tipo di riparazione</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Elettricista"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Elettricista</h5>
-                    <p className="text-sm opacity-90">Impianti, riparazioni elettriche</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/8486944/pexels-photo-8486944.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Idraulico"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Idraulico</h5>
-                    <p className="text-sm opacity-90">Perdite, scarichi, installazioni</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Caldaista"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Caldaista</h5>
-                    <p className="text-sm opacity-90">Caldaie, riscaldamento, gas</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/6585751/pexels-photo-6585751.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Montaggio Mobili"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Montaggio Mobili</h5>
-                    <p className="text-sm opacity-90">IKEA, armadi, cucine</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Servizi Creativi */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">Servizi Creativi</h4>
-              <p className="text-gray-600">Design, fotografia e servizi creativi professionali</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Interior Design"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Interior Design</h5>
-                    <p className="text-sm opacity-90">Progettazione, arredamento</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Fotografia"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Fotografia</h5>
-                    <p className="text-sm opacity-90">Matrimoni, eventi, ritratti</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Grafica e Web"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Grafica e Web</h5>
-                    <p className="text-sm opacity-90">Loghi, siti web, marketing</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Formazione e Benessere */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">Formazione e Benessere</h4>
-              <p className="text-gray-600">Crescita personale e cura del benessere</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Lezioni Private"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Lezioni Private</h5>
-                    <p className="text-sm opacity-90">Ripetizioni, lingue, musica</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Benessere"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Benessere</h5>
-                    <p className="text-sm opacity-90">Massaggi, personal trainer</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Beauty"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Beauty</h5>
-                    <p className="text-sm opacity-90">Parrucchieri, estetiste, nail art</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Auto e Servizi Speciali */}
-          <div className="mb-16">
-            <div className="text-center mb-8">
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">Auto e Servizi Speciali</h4>
-              <p className="text-gray-600">Servizi automotive e specializzati</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/3806288/pexels-photo-3806288.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Auto e Moto"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Auto e Moto</h5>
-                    <p className="text-sm opacity-90">Meccanici, carrozzieri, gommisti</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src="https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Servizi Specializzati"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h5 className="text-lg font-semibold">Servizi Specializzati</h5>
-                    <p className="text-sm opacity-90">Consulenze, servizi su misura</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Come funziona
-            </h3>
-            <p className="text-xl text-gray-600">
-              Tre semplici passaggi per trovare il professionista perfetto
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">
-                1
-              </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-4">Descrivi il tuo progetto</h4>
-              <p className="text-gray-600">
-                Raccontaci di cosa hai bisogno e ricevi preventivi personalizzati dai migliori professionisti
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">
-                2
-              </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-4">Confronta i preventivi</h4>
-              <p className="text-gray-600">
-                Ricevi fino a 5 preventivi gratuiti e confronta profili, recensioni e prezzi
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-orange-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">
-                3
-              </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-4">Scegli il migliore</h4>
-              <p className="text-gray-600">
-                Seleziona il professionista che preferisci e inizia il tuo progetto in tutta sicurezza
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center text-white">
-            <div>
-              <div className="text-4xl font-bold mb-2">150K+</div>
-              <div className="text-white/80">Professionisti attivi</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">2M+</div>
-              <div className="text-white/80">Progetti completati</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">4.8</div>
-              <div className="text-white/80">Valutazione media</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">500+</div>
-              <div className="text-white/80">Categorie di servizi</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Cosa dicono i nostri clienti
-            </h3>
-            <p className="text-xl text-gray-600">
-              Migliaia di clienti soddisfatti ogni giorno
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.slice(0, 6).map((testimonial, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                  ))}
-                  <span className="ml-2 text-sm text-gray-500">{testimonial.rating}.0</span>
-                </div>
-                <p className="text-gray-700 mb-4 italic leading-relaxed">"{testimonial.text}"</p>
-                <div>
-                  <div className="font-semibold text-gray-900 mb-1">{testimonial.name}</div>
-                  <div className="text-sm text-gray-600 mb-1">{testimonial.service}</div>
-                  <div className="text-xs text-gray-500 flex items-center">
-                    <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                    {testimonial.location}
-                  </div>
-                </div>
+                <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                  {service.name}
+                </h3>
               </div>
             ))}
           </div>
-          
-          {/* Show more testimonials button */}
-          <div className="text-center mt-12">
-            <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-              Vedi tutte le recensioni ({testimonials.length})
-            </button>
-          </div>
         </div>
       </section>
 
+      {/* Trust Badges */}
+      <TrustBadges />
+
+      {/* Reviews Section */}
+      <ReviewsSection />
+
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Sei un professionista?
-          </h3>
-          <p className="text-xl text-blue-100 mb-8">
-            Unisciti alla nostra rete di professionisti e fai crescere la tua attività
+      <section className="py-20 bg-gradient-to-r from-purple-600 to-pink-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Pronto a Trovare il Tuo Professionista?
+          </h2>
+          <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+            Ricevi preventivi gratuiti in pochi minuti. Nessun impegno, massima qualità.
           </p>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center gap-2">
-            <span onClick={() => setShowProfessional(true)}>Accedi come professionista</span>
+          <button
+            onClick={() => setShowServiceForm(true)}
+            className="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
+          >
+            <span>Richiedi Preventivi Gratuiti</span>
             <ArrowRight className="h-5 w-5" />
           </button>
         </div>
@@ -770,62 +664,164 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h4 className="text-2xl font-bold text-white mb-4">ServiziFacili</h4>
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+                ServiziFacili
+              </h3>
               <p className="text-gray-400 mb-4">
-                La piattaforma leader in Italia per trovare professionisti qualificati
+                La piattaforma italiana per trovare professionisti qualificati nella tua zona.
               </p>
-              <div className="flex items-center gap-4">
-                <Shield className="h-5 w-5 text-green-400" />
-                <span className="text-sm text-gray-400">Professionisti verificati</span>
+              <div className="flex space-x-4">
+                <a href="tel:+393896335889" className="text-gray-400 hover:text-white">
+                  <Phone className="h-5 w-5" />
+                </a>
+                <a href="mailto:ionutflorerea264@yahoo.com" className="text-gray-400 hover:text-white">
+                  <Mail className="h-5 w-5" />
+                </a>
               </div>
             </div>
-
+            
             <div>
-              <h5 className="font-semibold mb-4">Servizi</h5>
+              <h4 className="font-semibold mb-4">Servizi</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Casa e Giardino</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Riparazioni</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Design</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Tutti i servizi</a></li>
+               <li>
+                 <button 
+                   onClick={() => setCurrentView('services')}
+                   className="hover:text-white"
+                 >
+                   Tutti i Servizi
+                 </button>
+               </li>
+               <li><button className="hover:text-white">Casa e Giardino</button></li>
+               <li><button className="hover:text-white">Riparazioni</button></li>
+               <li><button className="hover:text-white">Design</button></li>
               </ul>
             </div>
-
+            
             <div>
-              <h5 className="font-semibold mb-4">Supporto</h5>
+              <h4 className="font-semibold mb-4">Azienda</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Centro assistenza</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Come funziona</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contattaci</a></li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('how-it-works')}
+                    className="hover:text-white"
+                  >
+                    Come Funziona
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('faq')}
+                    className="hover:text-white"
+                  >
+                    FAQ
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setShowContactForm(true)}
+                    className="hover:text-white"
+                  >
+                    Contatti
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('legal')}
+                    className="hover:text-white"
+                  >
+                    Info Legali
+                  </button>
+                </li>
               </ul>
             </div>
-
+            
             <div>
-              <h5 className="font-semibold mb-4">Azienda</h5>
+              <h4 className="font-semibold mb-4">Legale</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Chi siamo</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Carriere</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Termini di servizio</a></li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('privacy')}
+                    className="hover:text-white"
+                  >
+                    Privacy Policy
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('cookies')}
+                    className="hover:text-white"
+                  >
+                    Cookie Policy
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('terms')}
+                    className="hover:text-white"
+                  >
+                    Termini di Servizio
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentView('admin-login')}
+                    className="hover:text-white text-xs opacity-50"
+                  >
+                    Admin
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
-
-          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">© 2024 ServiziFacili. Tutti i diritti riservati.</p>
-            <div className="flex items-center gap-6 mt-4 md:mt-0">
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Clock className="h-4 w-4" />
-                Risposta in 24h
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Award className="h-4 w-4" />
-                Servizi di qualità
-              </div>
-            </div>
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 ServiziFacili. Tutti i diritti riservati.</p>
           </div>
         </div>
       </footer>
+
+      {/* Modals and Components */}
+      <ServiceRequestForm
+        isOpen={showServiceForm}
+        onClose={() => setShowServiceForm(false)}
+        onSubmit={handleServiceRequest}
+      />
+
+      <SearchResults
+        isOpen={showSearchResults}
+        onClose={() => setShowSearchResults(false)}
+        searchQuery={searchQuery}
+        location={location}
+      />
+
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+      />
+
+      {showContactForm && (
+        <ContactForm onClose={() => setShowContactForm(false)} />
+      )}
+
+      <ChatWidget
+        isOpen={isChatOpen}
+        onToggle={() => setIsChatOpen(!isChatOpen)}
+      />
+
+      <WhatsAppBanner phoneNumber="+393896335889" />
+
+      <CookieBanner
+        onAcceptAll={handleCookieAcceptAll}
+        onRejectAll={handleCookieRejectAll}
+        onCustomize={handleCookieCustomize}
+      />
+
+      <NotificationSystem
+        notifications={notifications}
+        onRemove={removeNotification}
+      />
     </div>
   );
 }

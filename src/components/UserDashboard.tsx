@@ -11,7 +11,8 @@ import {
   Phone,
   Mail,
   Calendar,
-  Euro
+  Euro,
+  X
 } from 'lucide-react';
 
 interface UserData {
@@ -49,21 +50,48 @@ export default function UserDashboard({ user, onLogout }: UserDashboardProps) {
   const [userRequests, setUserRequests] = useState<UserRequest[]>([
     {
       id: 'req-user-1',
-      service: 'Riparazione Caldaia',
-      description: 'La caldaia non si accende più da ieri sera',
-      budget: '€200-300',
+      service: 'Riparazione Caldaia Baxi Luna Duo-tec',
+      description: 'Caldaia Baxi modello Luna Duo-tec MP 1.35 che non si accende più da 2 giorni. Display spento, nessun errore visibile. Appartamento 90mq, riscaldamento autonomo. Necessario intervento tecnico specializzato entro 24 ore per ripristinare il riscaldamento.',
+      budget: '€150-250',
       status: 'active',
       createdAt: '2024-01-15T10:30:00Z',
-      quotesReceived: 3
+      quotesReceived: 5
     },
     {
       id: 'req-user-2',
-      service: 'Imbiancatura Soggiorno',
-      description: 'Necessito di imbiancare il soggiorno di 25mq',
-      budget: '€300-500',
+      service: 'Imbiancatura Appartamento 75mq',
+      description: 'Imbiancatura completa appartamento 75mq: 3 camere da letto, soggiorno con cucina a vista, bagno e corridoio. Pareti già preparate e stuccate. Preferenza per pittura lavabile bianca o colori neutri. Disponibilità flessibile, no urgenza.',
+      budget: '€600-900',
       status: 'completed',
       createdAt: '2024-01-10T14:20:00Z',
-      quotesReceived: 5
+      quotesReceived: 7
+    },
+    {
+      id: 'req-user-3',
+      service: 'Montaggio Cucina IKEA KNOXHULT',
+      description: 'Montaggio cucina IKEA modello KNOXHULT completa: 8 pensili, 6 basi, piano lavoro in laminato, lavello inox, elettrodomestici da incasso (forno, piano cottura a induzione, cappa aspirante). Cucina già consegnata, istruzioni e accessori disponibili.',
+      budget: '€300-450',
+      status: 'pending',
+      createdAt: '2024-01-08T09:15:00Z',
+      quotesReceived: 2
+    },
+    {
+      id: 'req-user-4',
+      service: 'Lezioni Private di Inglese',
+      description: 'Cerco insegnante madrelingua inglese per lezioni private. Livello intermedio (B1), obiettivo raggiungere B2 per certificazione. Preferenza per lezioni a domicilio, 2 volte a settimana, durata 1.5 ore. Disponibilità sera dopo le 18:00.',
+      budget: '€25-35/ora',
+      status: 'active',
+      createdAt: '2024-01-05T16:30:00Z',
+      quotesReceived: 4
+    },
+    {
+      id: 'req-user-5',
+      service: 'Servizio Pulizie Settimanali',
+      description: 'Cerco persona affidabile per pulizie domestiche settimanali. Appartamento 80mq: 2 camere, soggiorno, cucina, 2 bagni. Servizio completo: aspirapolvere, lavaggio pavimenti, bagni, cucina, spolverare. Ogni martedì mattina dalle 9:00 alle 12:00.',
+      budget: '€15-20/ora',
+      status: 'completed',
+      createdAt: '2024-01-02T11:00:00Z',
+      quotesReceived: 6
     }
   ]);
 
@@ -74,7 +102,7 @@ export default function UserDashboard({ user, onLogout }: UserDashboardProps) {
       id: `req-user-${Date.now()}`,
       service: newRequest.service,
       description: newRequest.description,
-      budget: newRequest.budget,
+      status: 'active', // Mostra come attiva al cliente (auto-approvata)
       status: 'pending',
       createdAt: new Date().toISOString(),
       quotesReceived: 0
