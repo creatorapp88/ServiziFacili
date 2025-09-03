@@ -16,8 +16,7 @@ import {
   XCircle,
   Clock,
   Wallet,
-  CreditCard,
-  User
+  CreditCard
 } from 'lucide-react';
 import { formatCurrency } from '../utils/pricing';
 import { Transaction, Wallet as WalletType } from '../types';
@@ -25,7 +24,6 @@ import WalletCard from './WalletCard';
 
 interface AdminDashboardProps {
   onLogout: () => void;
-  onViewRequests?: () => void;
 }
 
 interface Request {
@@ -38,13 +36,9 @@ interface Request {
   status: 'pending' | 'approved' | 'rejected';
   createdAt: string;
   budget?: string;
-  autoApproved?: boolean;
-  approvedAt?: string;
-  quotesReceived?: number;
-  maxQuotes?: number;
 }
 
-export default function AdminDashboard({ onLogout, onViewRequests }: AdminDashboardProps) {
+export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [requests, setRequests] = useState<Request[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -229,10 +223,6 @@ export default function AdminDashboard({ onLogout, onViewRequests }: AdminDashbo
                   {stats.pendingRequests}
                 </span>
               </button>
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Admin</p>
-                <p className="font-semibold text-gray-900">Pannello di Controllo</p>
-              </div>
               <button
                 onClick={onLogout}
                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
@@ -412,8 +402,8 @@ export default function AdminDashboard({ onLogout, onViewRequests }: AdminDashbo
                           <div className="text-sm text-gray-900">{request.service}</div>
                           <div className="text-sm text-gray-500 max-w-xs truncate">{request.description}</div>
                           <div className="text-xs text-blue-600 mt-1">
-                            Preventivi: {request.quotesReceived || 0}/{request.maxQuotes || 4}
-                            {(request.quotesReceived || 0) >= (request.maxQuotes || 4) && (
+                            Preventivi: {request.quotesReceived}/{request.maxQuotes}
+                            {request.quotesReceived >= request.maxQuotes && (
                               <span className="ml-2 bg-red-100 text-red-800 px-2 py-1 rounded-full">COMPLETA</span>
                             )}
                           </div>
@@ -432,6 +422,24 @@ export default function AdminDashboard({ onLogout, onViewRequests }: AdminDashbo
                             <button className="text-blue-600 hover:text-blue-900">
                               <Eye className="h-4 w-4" />
                             </button>
+                            {request.status === 'pending' && (
+                              <>
+                                <button
+                                  onClick={() => updateRequestStatus(request.id, 'approved')}
+                                  className="text-green-600 hover:text-green-900"
+                                  title="Approva richiesta"
+                                >
+                                  <CheckCircle className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => updateRequestStatus(request.id, 'rejected')}
+                                  className="text-red-600 hover:text-red-900"
+                                  title="Rifiuta richiesta"
+                                >
+                                  <XCircle className="h-4 w-4" />
+                                </button>
+                              </>
+                            )}
                             {/* Controlli admin sempre disponibili */}
                             {request.status === 'approved' && (
                               <>

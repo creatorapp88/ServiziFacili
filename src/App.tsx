@@ -165,15 +165,12 @@ function App() {
     setCurrentUser(mockUser);
     setShowLoginModal(false);
     
-    // Notifica immediata di login
-    setTimeout(() => {
-      addNotification({
-        type: 'success',
-        title: 'Login effettuato con successo!',
-        message: `Benvenuto ${mockUser.name}! Ora puoi accedere a tutte le funzionalità.`,
-        duration: 4000
-      });
-    }, 100);
+    addNotification({
+      type: 'success',
+      title: 'Login effettuato',
+      message: `Benvenuto ${mockUser.name}!`,
+      duration: 3000
+    });
   };
 
   const handleRegister = (userData: any) => {
@@ -190,15 +187,12 @@ function App() {
     setCurrentUser(newUser);
     setShowLoginModal(false);
     
-    // Notifica immediata di registrazione
-    setTimeout(() => {
-      addNotification({
-        type: 'success',
-        title: 'Registrazione completata!',
-        message: `Benvenuto ${newUser.name}! Il tuo account è stato creato con successo.`,
-        duration: 5000
-      });
-    }, 100);
+    addNotification({
+      type: 'success',
+      title: 'Registrazione completata',
+      message: `Benvenuto ${newUser.name}! Il tuo account è stato creato.`,
+      duration: 5000
+    });
   };
 
   const handleProfessionalLogin = (credentials: { username: string; password: string }) => {
@@ -207,30 +201,24 @@ function App() {
       setCurrentUser(mockProfessional);
       setCurrentView('home');
       
-      // Notifica immediata login professionista
-      setTimeout(() => {
-        addNotification({
-          type: 'success',
-          title: 'Accesso Professionista Effettuato!',
-          message: `Benvenuto ${mockProfessional.name}! Dashboard professionista caricata.`,
-          duration: 4000
-        });
-      }, 100);
+      addNotification({
+        type: 'success',
+        title: 'Login Professionista',
+        message: `Benvenuto ${mockProfessional.name}!`,
+        duration: 3000
+      });
     } else {
-      // Notifica immediata errore login
-      setTimeout(() => {
-        addNotification({
-          type: 'error',
-          title: 'Login Fallito!',
-          message: 'Credenziali non valide. Usa: pro / pro123',
-          duration: 5000
-        });
-      }, 100);
+      addNotification({
+        type: 'error',
+        title: 'Login fallito',
+        message: 'Credenziali non valide. Usa: pro / pro123',
+        duration: 5000
+      });
     }
   };
 
   const handleAdminLogin = (credentials: { username: string; password: string }) => {
-    // Demo credentials from AdminLogin component
+    // Admin credentials: ionutflorea264@yahoo.com / Affitto2017
     if (credentials.username === 'ionutflorea264@yahoo.com' && credentials.password === 'Affitto2017') {
       const adminUser: UserType = {
         id: 'admin-1',
@@ -244,62 +232,44 @@ function App() {
       setCurrentUser(adminUser);
       setAdminView('dashboard');
       
-      // Notifica immediata login admin
-      setTimeout(() => {
-        addNotification({
-          type: 'success',
-          title: 'Accesso Amministratore Effettuato!',
-          message: 'Benvenuto nel pannello di controllo amministratore.',
-          duration: 4000
-        });
-      }, 100);
+      addNotification({
+        type: 'success',
+        title: 'Login Admin',
+        message: 'Accesso amministratore effettuato',
+        duration: 3000
+      });
     } else {
-      // Notifica immediata errore admin
-      setTimeout(() => {
-        addNotification({
-          type: 'error',
-          title: 'Accesso Negato!',
-          message: 'Credenziali amministratore non valide.',
-          duration: 5000
-        });
-      }, 100);
+      addNotification({
+        type: 'error',
+        title: 'Login fallito',
+        message: 'Credenziali amministratore non valide',
+        duration: 5000
+      });
     }
   };
 
   const handleLogout = () => {
-    const userName = currentUser?.name || 'Utente';
-    
     setCurrentUser(null);
     setCurrentView('home');
     
-    // Notifica immediata di logout
-    setTimeout(() => {
-      addNotification({
-        type: 'info',
-        title: 'Logout Effettuato!',
-        message: `Arrivederci ${userName}! Torna presto a trovarci.`,
-        duration: 4000
-      });
-    }, 100);
-    
-    if (window.location.pathname === '/admin' || window.location.hash === '#/admin') {
-      window.location.href = '/';
-    }
+    addNotification({
+      type: 'info',
+      title: 'Logout effettuato',
+      message: 'Arrivederci!',
+      duration: 3000
+    });
   };
 
   // Service request handler
   const handleServiceRequest = (requestData: any) => {
     console.log('Service request submitted:', requestData);
     
-    // Notifica immediata richiesta servizio
-    setTimeout(() => {
-      addNotification({
-        type: 'success',
-        title: 'Richiesta Inviata con Successo!',
-        message: 'Riceverai i primi preventivi entro poche ore. Controlla la tua email!',
-        duration: 6000
-      });
-    }, 100);
+    addNotification({
+      type: 'success',
+      title: 'Richiesta inviata!',
+      message: 'Riceverai i primi preventivi entro poche ore.',
+      duration: 5000
+    });
   };
 
   // Search handler
@@ -764,7 +734,11 @@ function App() {
                 </li>
                 <li>
                   <button 
-                    onClick={() => setCurrentView('admin-login')}
+                    onClick={() => {
+                      setCurrentView('admin-login');
+                      setAdminView('login');
+                      window.history.pushState({}, '', '/admin');
+                    }}
                     className="hover:text-white text-xs opacity-50"
                   >
                     Admin
