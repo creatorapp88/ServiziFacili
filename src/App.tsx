@@ -408,8 +408,18 @@ function App() {
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20 relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 opacity-95">
+          <img 
+            src="https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            alt="Professionisti che offrono servizi"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 to-indigo-100/80"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             Trova il <span className="text-blue-600">professionista</span><br />
             perfetto per te
