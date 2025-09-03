@@ -94,7 +94,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         description: 'La caldaia non si accende più da ieri sera',
         status: 'pending',
         createdAt: '2024-01-15T10:30:00Z',
-        budget: '€200-300'
+        budget: '€150-250'
       },
       {
         id: 2,
@@ -115,8 +115,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         service: 'Riparazione Elettrodomestici',
         description: 'Lavatrice che perde acqua',
         status: 'rejected',
-        createdAt: '2024-01-13T09:20:00Z',
-        budget: '€80-150'
+        createdAt: '2024-01-13T09:15:00Z',
+        budget: '€100-150'
       }
     ];
     setRequests(mockRequests);
