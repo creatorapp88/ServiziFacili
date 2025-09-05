@@ -41,7 +41,7 @@ export default function FAQ({ onBack }: FAQProps) {
     // Domande per Clienti
     {
       question: "Come faccio a richiedere un preventivo?",
-      answer: "È semplicissimo: 1) Compila il form descrivendo il servizio che ti serve, 2) Ricevi fino a 5 preventivi gratuiti entro 24 ore, 3) Confronta e scegli il professionista che preferisci.",
+      answer: "È semplicissimo: 1) Compila il form descrivendo il servizio che ti serve, 2) Ricevi fino a 4 preventivi gratuiti entro 24 ore, 3) Confronta e scegli il professionista che preferisci.",
       category: 'clienti'
     },
     {
