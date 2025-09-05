@@ -77,7 +77,7 @@ export default function LegalInfo({ onBack }: LegalInfoProps) {
                   <div>
                     <h3 className="font-medium text-gray-900 mb-1">Sede Legale</h3>
                     <p className="text-gray-700">
-                      Via Brera 28<br />
+                      Via Brevira 18<br />
                       20121 Milano (MI)<br />
                       Italia
                     </p>
