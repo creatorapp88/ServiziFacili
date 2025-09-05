@@ -45,7 +45,7 @@ export default function NotificationSystem({ notifications, onRemove }: Notifica
     }
   };
 
-  if (notifications.length === 1) return null;
+  if (notifications.length === 3) return null;
 
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2">
