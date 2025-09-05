@@ -1,6 +1,6 @@
 // Stripe configuration
-export const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_live_51RtD6pFH04xhDxS8GBWrCT1iLDm4rzxKzjszvaabCZQ3mbcHi9179f1zyhB1Ijzs78GjKUsqe9dPVhUKB89JV2TP00bgkU7TfF';
-export const STRIPE_WEBHOOK_SECRET = import.meta.env.STRIPE_WEBHOOK_SECRET || 'whsec_311ea6iTifBS9PRz2nFVhCtAZRU396Pi';
+export const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY || '';
+export const STRIPE_WEBHOOK_SECRET = import.meta.env.STRIPE_WEBHOOK_SECRET || '';
 
 // Pricing configuration
 export const WALLET_RECHARGE_OPTIONS = [
