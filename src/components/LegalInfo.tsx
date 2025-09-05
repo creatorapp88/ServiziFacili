@@ -143,7 +143,7 @@ export default function LegalInfo({ onBack }: LegalInfoProps) {
               <div>
                 <h3 className="font-medium text-gray-900 mb-2">Responsabilità</h3>
                 <p className="text-gray-700">
-                  ServiziFacili S.r.l. agisce esclusivamente come intermediario. La responsabilità per la qualità 
+                  ServiziFacili S.r.l.S agisce esclusivamente come intermediario. La responsabilità per la qualità 
                   dei servizi forniti rimane in capo ai singoli professionisti iscritti alla piattaforma.
                 </p>
               </div>
