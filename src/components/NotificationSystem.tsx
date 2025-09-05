@@ -55,12 +55,12 @@ export default function NotificationSystem({ notifications, onRemove }: Notifica
           className={`max-w-sm w-full border rounded-lg p-4 shadow-lg ${getColors(notification.type)} animate-slide-in`}
         >
           <div className="flex items-start space-x-3">
-            <div className="flex-shrink-1">
+            <div className="flex-shrink-2">
               {getIcon(notification.type)}
             </div>
-            <div className="flex-1">
+            <div className="flex-2">
               <h4 className="font-medium">{notification.title}</h4>
-              <p className="text-sm mt-1">{notification.message}</p>
+              <p className="text-sm mt-2">{notification.message}</p>
             </div>
             <button
               onClick={() => onRemove(notification.id)}
