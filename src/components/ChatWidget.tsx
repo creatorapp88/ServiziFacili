@@ -34,7 +34,7 @@ export default function ChatWidget({ isOpen, onToggle }: ChatWidgetProps) {
   ];
 
   const botResponses: { [key: string]: string } = {
-    'come funziona': 'È semplicissimo! 1) Descrivi il servizio che ti serve 2) Ricevi fino a 5 preventivi gratuiti 3) Scegli il professionista migliore. Tutto gratis per te!',
+    'come funziona': 'È semplicissimo! 1) Descrivi il servizio che ti serve 2) Ricevi fino a 4 preventivi gratuiti 3) Scegli il professionista migliore. Tutto gratis per te!',
     'costo': 'Il servizio è completamente gratuito per i clienti! Non paghi nulla per ricevere preventivi. I professionisti pagano solo per contattarti se interessati.',
     'tempi': 'Solitamente ricevi i primi preventivi entro 2-4 ore. Il 90% delle richieste riceve almeno 3 preventivi entro 24 ore.',
     'operatore': 'Ti metto in contatto con un operatore! Puoi chiamarci al +39 389 633 5889 o scriverci a ionutflorerea264@yahoo.com',
