@@ -46,7 +46,7 @@ export default function FAQ({ onBack }: FAQProps) {
     },
     {
       question: "Quanto tempo ci vuole per ricevere i preventivi?",
-      answer: "Solitamente ricevi i primi preventivi entro poche ore. Il 90% delle richieste riceve almeno 3 preventivi entro 24 ore. Per servizi urgenti, molti professionisti rispondono entro 1-2 ore.",
+      answer: "Solitamente ricevi i primi preventivi entro poche ore. Il 90% delle richieste riceve almeno 2(3 preventivi entro 24 ore. Per servizi urgenti, molti professionisti rispondono entro 1-2 ore.",
       category: 'clienti'
     },
     {
