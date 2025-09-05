@@ -46,7 +46,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [adminWallet, setAdminWallet] = useState<WalletType>({
     id: 'admin-wallet',
     userId: 'admin',
-    balance: 100.75,
+    balance: 50.75,
     currency: 'EUR',
     transactions: [
       {
